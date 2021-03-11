@@ -52,6 +52,10 @@
                     <div class="d-grid">
                         <button type="submit" class="btn btn-primary">Login</button>
                     </div>
+                    <div class="d-grid">
+                        <input class="btn btn-primary" type="submit" value="Register New User"
+							onclick="window.location.href='registrationForm'; return false;">	
+                    </div>
 <%--            	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> --%>
                 </form:form>
             </div>

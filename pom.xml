@@ -30,7 +30,7 @@
   			<version>5.3.4</version>
 		</dependency>
 		
-		<!-- Add Spring ORM and Spring Security Core -->
+		<!-- Add Spring ORM and Spring Security Core, Config -->
 		<dependency>
   			<groupId>org.springframework</groupId>
   			<artifactId>spring-orm</artifactId>
@@ -41,7 +41,12 @@
   			<artifactId>spring-security-core</artifactId>
   			<version>5.4.5</version>
 		</dependency>
-
+			<dependency>
+  			<groupId>org.springframework.security</groupId>
+  			<artifactId>spring-security-config</artifactId>
+  			<version>5.4.5</version>
+		</dependency>
+		
 		<!-- Servlet, JSP and JSTL support -->
 		<dependency>
 			<groupId>javax.servlet</groupId>

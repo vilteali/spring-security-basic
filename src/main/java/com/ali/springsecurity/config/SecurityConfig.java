@@ -1,7 +1,5 @@
 package com.ali.springsecurity.config;
 
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +17,7 @@ import com.ali.springsecurity.service.UserService;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
-	private DataSource securityDataSource;
+    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 	
 	@Autowired
 	private UserService userService;
@@ -27,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		
-		auth.jdbcAuthentication().dataSource(securityDataSource);
+		auth.authenticationProvider(authenticationProvider());
 		
 	}
 
@@ -39,12 +37,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/").hasRole("EMPLOYEE")
 			.antMatchers("/administrators/**").hasRole("ADMINISTRATOR")
 			.antMatchers("/development/**").hasAnyRole("DEVELOPER","QA")
-//			.anyRequest()
-//			.authenticated()
 			.and()
 			.formLogin()
 				.loginPage("/loginPage")
 				.loginProcessingUrl("/authenticateUser")
+				.successHandler(customAuthenticationSuccessHandler)
 				.permitAll()
 			.and()
 			.exceptionHandling().accessDeniedPage("/accessDenied")
@@ -61,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public DaoAuthenticationProvider authenticationProvider() {
 		
 		DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
-		auth.setUserDetailsService(null/*userService*/);
+		auth.setUserDetailsService(userService);
 		auth.setPasswordEncoder(passwordEncoder());
 		return auth;
 		

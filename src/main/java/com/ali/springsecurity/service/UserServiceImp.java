@@ -12,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.ali.springsecurity.dao.RoleDAO;
 import com.ali.springsecurity.dao.UserDAO;
@@ -19,6 +20,7 @@ import com.ali.springsecurity.entity.Role;
 import com.ali.springsecurity.entity.User;
 import com.ali.springsecurity.model.CRMUser;
 
+@Service
 public class UserServiceImp implements UserService {
 	
 	@Autowired

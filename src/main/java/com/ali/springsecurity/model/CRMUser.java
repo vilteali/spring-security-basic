@@ -1,10 +1,14 @@
 package com.ali.springsecurity.model;
 
+import com.ali.springsecurity.annotations.FieldMatch;
 import com.ali.springsecurity.annotations.ValidEmail;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+@FieldMatch.List({ 
+	@FieldMatch(first = "password", second = "matchingPassword", 
+				message = "The password fields must match")})
 public class CRMUser {
 	
 	@NotNull(message = "is required")

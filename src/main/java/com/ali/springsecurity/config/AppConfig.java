@@ -1,16 +1,20 @@
 package com.ali.springsecurity.config;
 
 import java.beans.PropertyVetoException;
+import java.util.Properties;
 import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -21,7 +25,9 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages={"com.ali.springsecurity.config","com.ali.springsecurity.controller"})
+@ComponentScan(basePackages={"com.ali.springsecurity.config","com.ali.springsecurity.controller",
+				"com.ali.springsecurity.dao", "com.ali.springsecurity.entity",
+				"com.ali.springsecurity.service"})
 @PropertySource("classpath:persistence-mysql.properties")
 public class AppConfig implements WebMvcConfigurer {
 	
@@ -49,7 +55,7 @@ public class AppConfig implements WebMvcConfigurer {
 	}
 	
 	@Bean
-	public DataSource dataSoruce() {
+	public DataSource securityDataSource() {
 		
 		ComboPooledDataSource securityDataSource = new ComboPooledDataSource();
 		
@@ -84,9 +90,39 @@ public class AppConfig implements WebMvcConfigurer {
 		return intPropVal;
 	}
 	
+	private Properties getHibernateProperties() {
+		
+		Properties props = new Properties();
+		props.setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));
+		props.setProperty("hibernate.show_sql", environment.getProperty("hibernate.show_sql"));
+		
+		return props;
+		
+	}
 	
+	@Bean
+	public LocalSessionFactoryBean sessionFactory() {
+		
+		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+		//set the properties
+		sessionFactory.setDataSource(securityDataSource());
+		sessionFactory.setPackagesToScan(environment.getProperty("hibernate.packagesToScan"));
+		sessionFactory.setHibernateProperties(getHibernateProperties());
+		
+		return sessionFactory;
+		
+	}
 	
-	
-	
+	@Bean
+	@Autowired
+	public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
+		
+		// setup transaction manager based on session factory
+		HibernateTransactionManager txManager = new HibernateTransactionManager();
+		txManager.setSessionFactory(sessionFactory);
+		
+		return txManager;
+		
+	}
 	
 }
