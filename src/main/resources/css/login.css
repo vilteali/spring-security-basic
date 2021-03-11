@@ -1,0 +1,13 @@
+body {
+    background: #e2ecf3;
+    background: linear-gradient(to right,#efe6e6, #eae9e4);
+}
+
+img {
+	width: 65px;
+	margin-top: 25px;
+}
+
+h2 {
+	margin-top: 17px;
+}
