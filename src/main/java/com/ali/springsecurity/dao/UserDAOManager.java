@@ -2,6 +2,7 @@ package com.ali.springsecurity.dao;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,10 +19,12 @@ public class UserDAOManager implements UserDAO {
 		
 		Session currentSession = sessionFactory.getCurrentSession();
 		User user = null;
+		final String queryUser = "from User where username=:userName";
 		
 		try {
-			user = currentSession.createQuery("from User where userName=:uName", 
-					User.class).getSingleResult();
+			Query<User> query = currentSession.createQuery(queryUser, User.class);
+			query.setParameter("userName", userName);
+			user = query.getSingleResult();
 			
 		}catch(Exception e) {
 			e.printStackTrace();

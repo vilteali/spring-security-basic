@@ -15,6 +15,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -25,6 +26,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 @Configuration
 @EnableWebMvc
+@EnableTransactionManagement
 @ComponentScan(basePackages={"com.ali.springsecurity.config","com.ali.springsecurity.controller",
 				"com.ali.springsecurity.dao", "com.ali.springsecurity.entity",
 				"com.ali.springsecurity.service"})
@@ -60,7 +62,7 @@ public class AppConfig implements WebMvcConfigurer {
 		ComboPooledDataSource securityDataSource = new ComboPooledDataSource();
 		
 		try {
-			securityDataSource.setDriverClass(environment.getProperty("jdbc.driver"));
+			securityDataSource.setDriverClass("com.mysql.cj.jdbc.Driver");
 		} catch (PropertyVetoException e) {
 			throw new RuntimeException(e);
 		}
